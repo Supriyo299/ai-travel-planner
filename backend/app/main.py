@@ -1,11 +1,28 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+from app.api.dependencies import get_db
+from app.core.config import settings
 
 app = FastAPI(
-    title="AI Travel Planner API",
-    version="1.0.0",
-    description ="API for planning travel itineraries"
+    title=settings.APP_NAME,
+    debug=settings.DEBUG,
 )
 
+
 @app.get("/")
-def read_root():
-    return {"message": "AI Travel Planner API is running."}
+def root():
+    return {
+        "message": "AI Travel Planner API is running 🚀",
+        "environment": settings.APP_ENV,
+    }
+
+
+@app.get("/health")
+def health(db: Session = Depends(get_db)):
+    db.execute(text("SELECT 1"))
+    return {
+        "status": "healthy",
+        "database": "connected",
+    }
