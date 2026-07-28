@@ -2,6 +2,7 @@ from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from app.api.router import api_router
 from app.api.dependencies import get_db
 from app.core.config import settings
 
@@ -9,7 +10,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG,
 )
-
+app.include_router(api_router)
 
 @app.get("/")
 def root():
