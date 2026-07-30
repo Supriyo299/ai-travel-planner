@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -17,3 +19,7 @@ class UserRepository:
         self.db.commit()
         self.db.refresh(user)
         return user
+
+    def get_by_id(self, user_id: UUID) -> User | None:
+        statement = select(User).where(User.id == user_id)
+        return self.db.execute(statement).scalar_one_or_none()
