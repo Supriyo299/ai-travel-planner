@@ -20,7 +20,10 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from app.db.base import Base
+
+# Import models so Alembic can discover them
 from app.models.user import User
+from app.models.trip import Trip
 
 target_metadata = Base.metadata
 
