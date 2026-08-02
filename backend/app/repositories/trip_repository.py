@@ -24,3 +24,18 @@ class TripRepository:
         )
 
         return list(self.db.scalars(statement).all())
+    def get_by_id(self, trip_id: UUID):
+        return (
+            self.db.query(Trip)
+            .filter(Trip.id == trip_id)
+            .first()
+        )
+    
+    def update(self, trip: Trip) -> Trip:
+        self.db.commit()
+        self.db.refresh(trip)
+        return trip
+
+    def delete(self, trip: Trip) -> Trip:
+        self.db.delete(trip)
+        self.db.commit()

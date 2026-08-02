@@ -35,3 +35,8 @@ class TripResponse(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
     )
+class TripUpdateRequest(BaseModel):
+    destination: str
+    budget: int
+    days: int
+    travel_style: str
