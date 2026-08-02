@@ -1,6 +1,6 @@
 from google import genai
 from app.core.config import settings
-
+from app.schemas.ai import GenerateTripResponse
 
 class GeminiService:
     def __init__(self):
@@ -8,43 +8,55 @@ class GeminiService:
             api_key=settings.GEMINI_API_KEY
         )
 
-    def test_connection(self):
-        response = self.client.models.generate_content(
-            model="gemini-3.6-flash",
-            contents="Say hello in one sentence."
-        )
     def generate_trip(
         self,
         destination: str,
         budget: int,
         days: int,
         travel_style: str,
-    ) -> str:
+    ) -> GenerateTripResponse:
 
         prompt = f"""
-You are a professional travel planner.
+You are an expert travel planner.
 
-Create a detailed {days}-day itinerary.
+Generate a travel itinerary.
 
 Destination: {destination}
 Budget: ₹{budget}
+Days: {days}
 Travel Style: {travel_style}
 
-Include:
-- Day-wise itinerary
-- Hotel suggestions
-- Food recommendations
-- Local transportation
-- Estimated expenses
-- Packing list
-- Travel tips
+Return the result matching this schema:
 
-Format the response neatly.
+- destination
+- summary
+- itinerary
+    - day
+    - title
+    - activities
+- hotels
+    - name
+    - price_per_night
+- food_recommendations
+- transportation
+- packing_list
+- budget_breakdown
+    - category
+    - amount
+- travel_tips
+
+Do NOT return markdown.
+Do NOT wrap the response in ```json.
+Return valid JSON only.
 """
 
         response = self.client.models.generate_content(
             model="gemini-3.6-flash",
             contents=prompt,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": GenerateTripResponse,
+            },
         )
 
-        return response.text
+        return response.parsed

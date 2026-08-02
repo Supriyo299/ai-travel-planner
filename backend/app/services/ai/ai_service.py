@@ -14,13 +14,9 @@ class AIService:
         data: GenerateTripRequest,
     ) -> GenerateTripResponse:
 
-        itinerary = self.gemini.generate_trip(
+        return self.gemini.generate_trip(
             destination=data.destination,
             budget=data.budget,
             days=data.days,
             travel_style=data.travel_style,
-        )
-
-        return GenerateTripResponse(
-            itinerary=itinerary,
         )
