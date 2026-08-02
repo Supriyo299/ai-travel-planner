@@ -13,4 +13,38 @@ class GeminiService:
             model="gemini-3.6-flash",
             contents="Say hello in one sentence."
         )
-        return response.text 
+    def generate_trip(
+        self,
+        destination: str,
+        budget: int,
+        days: int,
+        travel_style: str,
+    ) -> str:
+
+        prompt = f"""
+You are a professional travel planner.
+
+Create a detailed {days}-day itinerary.
+
+Destination: {destination}
+Budget: ₹{budget}
+Travel Style: {travel_style}
+
+Include:
+- Day-wise itinerary
+- Hotel suggestions
+- Food recommendations
+- Local transportation
+- Estimated expenses
+- Packing list
+- Travel tips
+
+Format the response neatly.
+"""
+
+        response = self.client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt,
+        )
+
+        return response.text
