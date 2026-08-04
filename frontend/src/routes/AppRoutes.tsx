@@ -1,8 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "../pages/auth/LoginPage";
-// import RegisterPage from "../pages/auth/RegisterPage";
-// import DashboardPage from "../pages/dashboard/DashboardPage";
+import RegisterPage from "../pages/auth/RegisterPage";
+import DashboardPage from "../pages/dashboard/DashboardPage";
+
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -11,9 +13,16 @@ export default function AppRoutes() {
 
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Uncomment these when you create them */}
-      {/* <Route path="/register" element={<RegisterPage />} /> */}
-      {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+      <Route path="/register" element={<RegisterPage />} />
+
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

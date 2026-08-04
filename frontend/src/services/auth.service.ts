@@ -4,6 +4,16 @@ export async function login(data: {
   email: string;
   password: string;
 }) {
-  const response = await api.post("/auth/login", data);
+  const form = new URLSearchParams();
+
+  form.append("username", data.email);
+  form.append("password", data.password);
+
+  const response = await api.post("/auth/login", form, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+
   return response.data;
 }
