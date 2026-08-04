@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
@@ -17,6 +18,7 @@ import { useAuthStore } from "../../store/auth-store";
 
 export default function LoginPage() {
   const setToken = useAuthStore((state) => state.setToken);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -33,6 +35,7 @@ export default function LoginPage() {
       setToken(response.access_token);
 
       toast.success("Login successful!");
+      navigate("/dashboard");
     } catch {
       toast.error("Invalid email or password");
     }
